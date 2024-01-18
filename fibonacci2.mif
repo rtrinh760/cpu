@@ -1,0 +1,51 @@
+-- program memory file for fibonacci.a
+DEPTH = 256;
+WIDTH = 16;
+ADDRESS_RADIX = HEX;
+DATA_RADIX = BIN;
+CONTENT
+BEGIN
+00 : 1111100001101000; -- move 13 to RA -- initialize fib
+01 : 1111100010101001; -- move 21 to RB -- initialize fib
+02 : 1111100001010011; -- move 10 to RD -- counter
+03 : 1111100000001100; -- move 1 to RE
+04 : 1000000001000010; -- add RA + RB to RC (based on eq. Fn = Fn-1 + Fn-2 using DP cache approach)
+05 : 1111000100000000; -- load RB to RA
+06 : 1111001000000001; -- load RC to RB
+07 : 1001011100000011; -- subtract RE from RD
+08 : 0011000000001010; -- branch to line 10 if zero
+09 : 0010000000000100; -- branch to line 4
+0A : 0011110000000000; -- exit
+END
+
+-- opcode = move, T = 1, 0, dest = RA
+-- 00 : 1111 1 00001101 000; -- Move 13 to RA
+
+-- opcode = move, T = 1, 0, dest = RB
+-- 01 : 1111 1 00010101 001; -- Move 21 to RB
+
+-- opcode = move, T = 1, 10, dest = RD   
+-- 02 : 1111 1 00001010 011; -- Move 10 to RD
+
+-- opcode = add, srcA = RA, srcB = RB, unused, dest = RC
+-- 03 : 1000 000 001 000 010; -- Add RA RB to RC
+
+-- opcode = move, T = 0, src = RB, unused, dest = RA
+-- 04 : 1111 0 001 00000 000; -- Move RB to RA
+
+-- opcode = move, T = 0, src = RC, unused, dest = RB
+-- 06 : 1111 0 010 00000 001; -- Move RC to RB
+
+-- opcode = sub, srcA = RD, srcB = RE, unused, dest = RD
+-- 06 : 1001 011 100 000 011; -- Subtract RE from RD
+
+-- opcode = conditional, CC = 00 (zero), line 10
+-- 07 : 001100 00 00001010; -- branch to line 10 if ALU = 0
+
+-- opcode = unconditional, unused, line 4
+-- 08 : 0010 0000 00000100; -- branch to line 4
+
+-- opcode = exit
+-- 0A : 001111 0000000000; -- exit
+
+
